@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation ROI Calculator | Nebula AI Agency</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .calculator-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 3rem;
+            background: var(--surface);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .calculator-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--background);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .help-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            margin-top: 2rem;
+        }
+        
+        .results {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: var(--background);
+            border-radius: 12px;
+            border: 2px solid var(--success);
+            display: none;
+        }
+        
+        .results.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .results h2 {
+            color: var(--success);
+            margin-bottom: 1.5rem;
+        }
+        
+        .result-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .result-value.highlight {
+            font-size: 2rem;
+            color: var(--success);
+        }
+        
+        .opportunities {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .opportunities h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .opportunity-item {
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .opportunity-item h4 {
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .opportunity-impact {
+            color: var(--success);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">Nebula AI Agency</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1>Calculate Your Automation ROI</h1>
+            <p class="section-subtitle">See how much time and money you could save with automation</p>
+        </div>
+
+        <form id="roiForm">
+            <div class="form-group">
+                <label for="employees">Number of Employees</label>
+                <input type="number" id="employees" min="1" max="10000" required>
+                <p class="help-text">How many people work in your organization?</p>
+            </div>
+
+            <div class="form-group">
+                <label for="avgHourlyRate">Average Hourly Rate ($)</label>
+                <input type="number" id="avgHourlyRate" min="10" max="500" required>
+                <p class="help-text">Approximate hourly cost per employee (including benefits)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="manualTasks">Hours Spent on Manual Tasks (per week)</label>
+                <input type="number" id="manualTasks" min="1" max="168" required>
+                <p class="help-text">Average hours per employee on repetitive, automatable work</p>
+            </div>
+
+            <div class="form-group">
+                <label for="industry">Industry</label>
+                <select id="industry" required>
+                    <option value="">Select your industry</option>
+                    <option value="ecommerce">E-commerce</option>
+                    <option value="saas">SaaS/Tech</option>
+                    <option value="agency">Agency/Services</option>
+                    <option value="finance">Finance/Banking</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="manufacturing">Manufacturing</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="painPoint">Biggest Pain Point</label>
+                <select id="painPoint" required>
+                    <option value="">Select primary challenge</option>
+                    <option value="data-entry">Manual data entry</option>
+                    <option value="reporting">Report generation</option>
+                    <option value="customer-support">Customer support volume</option>
+                    <option value="lead-management">Lead management</option>
+                    <option value="scheduling">Scheduling/coordination</option>
+                    <option value="integration">Tool integration issues</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary calculate-btn">Calculate My Savings →</button>
+        </form>
+
+        <div id="results" class="results">
+            <h2>Your Automation Potential</h2>
+            
+            <div class="result-item">
+                <div class="result-label">Annual Time Savings</div>
+                <div class="result-value highlight" id="timeSavings">-</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">Annual Cost Savings</div>
+                <div class="result-value highlight" id="costSavings">-</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">Payback Period</div>
+                <div class="result-value" id="payback">-</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">3-Year ROI</div>
+                <div class="result-value" id="roi">-</div>
+            </div>
+
+            <div class="opportunities">
+                <h3>Recommended Automations for Your Business</h3>
+                <div id="opportunityList"></div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="index.html#contact" class="btn btn-primary">Get Your Free Audit →</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('roiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const employees = parseInt(document.getElementById('employees').value);
+            const hourlyRate = parseInt(document.getElementById('avgHourlyRate').value);
+            const manualHours = parseInt(document.getElementById('manualTasks').value);
+            const industry = document.getElementById('industry').value;
+            const painPoint = document.getElementById('painPoint').value;
+            
+            // Calculations
+            const automationEfficiency = 0.70; // 70% of manual work can be automated
+            const hoursPerYear = manualHours * 52;
+            const timeSaved = hoursPerYear * employees * automationEfficiency;
+            const costSaved = timeSaved * hourlyRate;
+            
+            // Investment estimate (conservative)
+            const investmentCost = employees < 10 ? 5000 : employees < 50 ? 10000 : 15000;
+            const paybackMonths = Math.ceil((investmentCost / costSaved) * 12);
+            const threeYearROI = ((costSaved * 3 - investmentCost) / investmentCost) * 100;
+            
+            // Display results
+            document.getElementById('timeSavings').textContent = 
+                timeSaved.toLocaleString() + ' hours';
+            document.getElementById('costSavings').textContent = 
+                '$' + Math.round(costSaved).toLocaleString();
+            document.getElementById('payback').textContent = 
+                paybackMonths + ' months';
+            document.getElementById('roi').textContent = 
+                Math.round(threeYearROI).toLocaleString() + '%';
+            
+            // Generate opportunities based on inputs
+            const opportunities = generateOpportunities(industry, painPoint, employees);
+            const opportunityHTML = opportunities.map(opp => `
+                <div class="opportunity-item">
+                    <h4>${opp.title}</h4>
+                    <p class="opportunity-impact">${opp.impact}</p>
+                    <p style="color: var(--text-secondary);">${opp.description}</p>
+                </div>
+            `).join('');
+            
+            document.getElementById('opportunityList').innerHTML = opportunityHTML;
+            document.getElementById('results').classList.add('show');
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        function generateOpportunities(industry, painPoint, employees) {
+            const opportunities = [];
+            
+            // Pain point specific
+            const painPointMap = {
+                'data-entry': {
+                    title: 'Automated Data Sync Pipeline',
+                    impact: 'Save 15-20 hours/week per employee',
+                    description: 'Connect your apps and eliminate manual data entry with real-time synchronization across all platforms.'
+                },
+                'reporting': {
+                    title: 'Automated Report Generation',
+                    impact: 'Generate reports in seconds instead of hours',
+                    description: 'Schedule automated reports that pull data from multiple sources and deliver insights on demand.'
+                },
+                'customer-support': {
+                    title: 'AI Support Agent',
+                    impact: 'Handle 70% of inquiries automatically',
+                    description: 'Deploy intelligent chatbot that resolves common issues, qualifies leads, and escalates complex cases.'
+                },
+                'lead-management': {
+                    title: 'Lead Qualification System',
+                    impact: 'Score and route leads in under 60 seconds',
+                    description: 'Automatically enrich, score, and route leads to the right team member based on intelligence.'
+                },
+                'scheduling': {
+                    title: 'Smart Scheduling Assistant',
+                    impact: 'Eliminate 90% of scheduling back-and-forth',
+                    description: 'Automated meeting coordination, calendar optimization, and reminder sequences.'
+                },
+                'integration': {
+                    title: 'Custom Integration Hub',
+                    impact: 'Connect all your tools seamlessly',
+                    description: 'Build bridges between disconnected systems with real-time data flows and automated workflows.'
+                }
+            };
+            
+            opportunities.push(painPointMap[painPoint] || painPointMap['data-entry']);
+            
+            // Industry specific
+            if (industry === 'ecommerce') {
+                opportunities.push({
+                    title: 'Order-to-Fulfillment Automation',
+                    impact: 'Process orders 10x faster',
+                    description: 'Automate inventory updates, shipping label creation, and customer notifications.'
+                });
+            } else if (industry === 'saas') {
+                opportunities.push({
+                    title: 'User Onboarding Automation',
+                    impact: 'Increase activation by 40%',
+                    description: 'Intelligent email sequences, in-app guidance, and usage-based interventions.'
+                });
+            } else if (industry === 'agency') {
+                opportunities.push({
+                    title: 'Client Reporting Dashboard',
+                    impact: 'Save 10+ hours per client/month',
+                    description: 'Automated performance tracking and beautiful client dashboards updated in real-time.'
+                });
+            }
+            
+            // Size-based
+            if (employees > 20) {
+                opportunities.push({
+                    title: 'Enterprise Workflow Orchestration',
+                    impact: 'Coordinate complex multi-team processes',
+                    description: 'Build sophisticated workflows that span departments with approvals, notifications, and escalations.'
+                });
+            }
+            
+            return opportunities.slice(0, 3);
+        }
+    </script>
+</body>
+</html>
